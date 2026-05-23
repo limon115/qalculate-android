@@ -6,11 +6,18 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.jherkenhoff.qalculate.R
 
-// Enforce True Black & Liquid Glass universally
+// Load the premium STIX Two font locally
+val StixMathFont = FontFamily(
+    Font(R.font.stix_regular, FontWeight.Normal),
+    Font(R.font.stix_bold, FontWeight.Bold)
+)
+
 private val LimonRebuildScheme = darkColorScheme(
     primary = ClassWizAccent,
     secondary = LiquidGlass,
@@ -26,25 +33,27 @@ private val LimonRebuildScheme = darkColorScheme(
     onSurfaceVariant = SolidWhite
 )
 
-// Inject Professional Serif Typography
-private val SerifTypography = Typography(
+// Inject Professional Math Typography
+private val PremiumMathTypography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Serif,
+        fontFamily = StixMathFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp
+        fontSize = 28.sp, // Bumped size for the main input readability
+        fontFeatureSettings = "frac" // Forces OpenType mathematical fractions
     ),
     bodyMedium = TextStyle(
-        fontFamily = FontFamily.Serif,
+        fontFamily = StixMathFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 18.sp,
+        fontFeatureSettings = "frac"
     ),
     headlineLarge = TextStyle(
-        fontFamily = FontFamily.Serif,
+        fontFamily = StixMathFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
+        fontSize = 36.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = FontFamily.Serif,
+        fontFamily = StixMathFont,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp
     )
@@ -53,13 +62,12 @@ private val SerifTypography = Typography(
 @Composable
 fun QalculateTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is completely disabled to protect the aesthetic
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colorScheme = LimonRebuildScheme,
-        typography = SerifTypography,
+        typography = PremiumMathTypography,
         content = content
     )
 }
