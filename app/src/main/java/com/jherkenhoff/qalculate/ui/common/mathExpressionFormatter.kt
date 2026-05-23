@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.em
 
+// Rebuild engineered by Khalid Hasan Limon
 @Composable
 fun mathExpressionFormatter(
     text: String,
@@ -16,10 +17,7 @@ fun mathExpressionFormatter(
 ): AnnotatedString {
     val tokens = Regex("""<.*?>|(&[a-z]+;)+|([^<&]+)?""").findAll(text)
 
-    // TODO: Implement <small> tags. (Apparently only used for base designation? https://github.com/Qalculate/libqalculate/blob/21f28b27bf99dc6d9f3325c4960a92ec9ee8934d/libqalculate/MathStructure-print.cc#L3604 )
-
     return buildAnnotatedString {
-
         for (token in tokens) {
             when (token.value) {
                 "<i>" -> pushStyle(SpanStyle(fontStyle = FontStyle.Italic))
@@ -33,29 +31,18 @@ fun mathExpressionFormatter(
                 "</sup>" -> pop()
                 "<sub>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.7.em))
                 "</sub>" -> pop()
+                "<frac>" -> append("(") // Start of fraction
+                "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
+                "</num>" -> pop()
+                "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
+                "</den>" -> pop()
+                "</frac>" -> append(")") // End of fraction
                 "&nbsp;" -> append("")
                 "&lt;" -> append("<")
                 "&gt;" -> append(">")
                 "&amp;" -> append("&")
-                
-                "<frac>" -> append("(") # Start of fraction
-                "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
-                "</num>" -> pop()
-                "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
-                "</den>" -> pop()
-                "</frac>" -> append(")") # End of fraction
-
-                
-                "<frac>" -> append("(") # Start of fraction
-                "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
-                "</num>" -> pop()
-                "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
-                "</den>" -> pop()
-                "</frac>" -> append(")") # End of fraction
-
                 else -> append(token.value)
             }
         }
-
     }
 }
