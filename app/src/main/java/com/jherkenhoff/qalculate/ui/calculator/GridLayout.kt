@@ -16,7 +16,32 @@ import androidx.compose.ui.unit.dp
 import com.jherkenhoff.qalculate.model.KeyPositionSpec
 import kotlin.math.roundToInt
 
-// ... (Keep GridScope class as is)
+// RESTORED: The required scope for Keypad.kt
+class GridScope {
+    internal data class PositionedItem(
+        val positionSpec: KeyPositionSpec,
+        val content: @Composable () -> Unit
+    )
+
+    internal val items = mutableListOf<PositionedItem>()
+
+    fun item(
+        positionSpec: KeyPositionSpec,
+        content: @Composable () -> Unit
+    ) {
+        items += PositionedItem(positionSpec, content)
+    }
+
+    fun item(
+        row: Int,
+        col: Int,
+        rowSpan: Int = 1,
+        colSpan: Int = 1,
+        content: @Composable () -> Unit
+    ) {
+        item(KeyPositionSpec(row, col, rowSpan, colSpan), content)
+    }
+}
 
 @Composable
 fun GridLayout(
@@ -64,7 +89,7 @@ fun Default() {
     val keyStyle = Modifier
         .padding(4.dp)
         .clip(CircleShape)
-        .background(Color(0xFF333333)) // Premium ClassWiz Dark Gray
+        .background(Color(0xFF333333))
 
     GridLayout(3, 3, aspectRatio = 1f) {
         item(0, 0) { Box(keyStyle) }
