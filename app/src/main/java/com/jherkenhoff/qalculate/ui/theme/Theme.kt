@@ -38,7 +38,7 @@ private val PremiumMathTypography = Typography(
     bodyLarge = TextStyle(
         fontFamily = StixMathFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 28.sp, // Bumped size for the main input readability
+        fontSize = 20.sp, // Bumped size for the main input readability
         fontFeatureSettings = "frac" // Forces OpenType mathematical fractions
     ),
     bodyMedium = TextStyle(
@@ -50,7 +50,7 @@ private val PremiumMathTypography = Typography(
     headlineLarge = TextStyle(
         fontFamily = StixMathFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 36.sp
+        fontSize = 26.sp
     ),
     labelLarge = TextStyle(
         fontFamily = StixMathFont,

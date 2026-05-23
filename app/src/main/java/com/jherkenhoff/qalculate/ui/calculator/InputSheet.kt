@@ -111,8 +111,10 @@ fun InputSheet(
                 onUserPreferencesChanged = onUserPreferencesChanged
             )
         }
-        AutoSizeMathDisplay(text = resultString)
-                .padding(horizontal = 16.dp, vertical=8.dp)
+        MathDisplay(
+            text = resultString,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .defaultMinSize(minHeight = 60.dp)
         )
 
