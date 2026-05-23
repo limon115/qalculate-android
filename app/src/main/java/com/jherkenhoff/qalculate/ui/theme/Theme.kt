@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jherkenhoff.qalculate.R
 
-// Load the premium STIX Two font locally
 val StixMathFont = FontFamily(
     Font(R.font.stix_regular, FontWeight.Normal),
     Font(R.font.stix_bold, FontWeight.Bold)
@@ -33,30 +32,15 @@ private val LimonRebuildScheme = darkColorScheme(
     onSurfaceVariant = SolidWhite
 )
 
-// Inject Professional Math Typography
+// Clamping all display sizes down to professional dimensions
 private val PremiumMathTypography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = StixMathFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 20.sp, // Bumped size for the main input readability
-        fontFeatureSettings = "frac" // Forces OpenType mathematical fractions
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = StixMathFont,
-        fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
-        fontFeatureSettings = "frac"
-    ),
-    headlineLarge = TextStyle(
-        fontFamily = StixMathFont,
-        fontWeight = FontWeight.Bold,
-        fontSize = 26.sp
-    ),
-    labelLarge = TextStyle(
-        fontFamily = StixMathFont,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp
-    )
+    displayLarge = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Normal, fontSize = 32.sp),
+    displayMedium = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Normal, fontSize = 26.sp),
+    displaySmall = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Normal, fontSize = 22.sp),
+    headlineLarge = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Bold, fontSize = 22.sp),
+    bodyLarge = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Normal, fontSize = 18.sp, fontFeatureSettings = "frac"),
+    bodyMedium = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Normal, fontSize = 16.sp, fontFeatureSettings = "frac"),
+    labelLarge = TextStyle(fontFamily = StixMathFont, fontWeight = FontWeight.Medium, fontSize = 14.sp)
 )
 
 @Composable
