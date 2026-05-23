@@ -73,7 +73,7 @@ import kotlin.math.roundToInt
 
 
 object KeyDefaults {
-    val Shape = RoundedCornerShape(6.dp)
+    val Shape = CircleShape
 }
 
 @Composable
@@ -511,7 +511,7 @@ fun SelectorKey(
                     Modifier
                         .width(160.dp)
                         .height(itemHeight * nItems)
-                        .background(Color.Black.copy(alpha = 0.85f), RoundedCornerShape(12.dp))
+                        .background(Color.Black.copy(alpha = 0.85f), CircleShape)
                         .clipToBounds()
                         .padding(vertical = 8.dp)
                 ) {
