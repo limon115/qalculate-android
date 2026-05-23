@@ -37,6 +37,22 @@ fun mathExpressionFormatter(
                 "&lt;" -> append("<")
                 "&gt;" -> append(">")
                 "&amp;" -> append("&")
+                
+                "<frac>" -> append("(") # Start of fraction
+                "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
+                "</num>" -> pop()
+                "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
+                "</den>" -> pop()
+                "</frac>" -> append(")") # End of fraction
+
+                
+                "<frac>" -> append("(") # Start of fraction
+                "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
+                "</num>" -> pop()
+                "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
+                "</den>" -> pop()
+                "</frac>" -> append(")") # End of fraction
+
                 else -> append(token.value)
             }
         }
