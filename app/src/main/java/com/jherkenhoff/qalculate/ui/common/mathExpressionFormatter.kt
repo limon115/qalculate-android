@@ -1,5 +1,6 @@
 package com.jherkenhoff.qalculate.ui.common
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
@@ -14,36 +15,47 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.em
 
-// 1. The Limon Rebuild 2D Math Display Engine
+// 1. The Limon Rebuild Diagnostic Display
 @Composable
 fun MathDisplay(text: String, modifier: Modifier = Modifier) {
-    // Regex to capture the exact Qalculate fraction structure
-    val fracRegex = Regex("<frac><num>(.*?)</num><den>(.*?)</den></frac>")
+    // A slightly more forgiving regex just in case there are hidden spaces
+    val fracRegex = Regex("<frac>\\s*<num>(.*?)</num>\\s*<den>(.*?)</den>\\s*</frac>")
     
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.wrapContentSize()
+    Column(
+        modifier = modifier.wrapContentSize(),
+        horizontalAlignment = Alignment.End
     ) {
-        var lastIndex = 0
-        val matches = fracRegex.findAll(text)
+        // DIAGNOSTIC TAPE: This will print the raw backend string in red
+        Text(
+            text = "RAW: $text",
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.labelLarge
+        )
         
-        for (match in matches) {
-            val preText = text.substring(lastIndex, match.range.first)
-            if (preText.isNotEmpty()) {
-                Text(text = cleanMathTags(preText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.wrapContentSize()
+        ) {
+            var lastIndex = 0
+            val matches = fracRegex.findAll(text)
+            
+            for (match in matches) {
+                val preText = text.substring(lastIndex, match.range.first)
+                if (preText.isNotEmpty()) {
+                    Text(text = cleanMathTags(preText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+                }
+                
+                val num = cleanMathTags(match.groupValues[1])
+                val den = cleanMathTags(match.groupValues[2])
+                TrueFraction(numerator = num, denominator = den)
+                
+                lastIndex = match.range.last + 1
             }
             
-            // Extract the numerator and denominator and feed them to the TrueFraction engine
-            val num = cleanMathTags(match.groupValues[1])
-            val den = cleanMathTags(match.groupValues[2])
-            TrueFraction(numerator = num, denominator = den)
-            
-            lastIndex = match.range.last + 1
-        }
-        
-        if (lastIndex < text.length) {
-            val postText = text.substring(lastIndex)
-            Text(text = cleanMathTags(postText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+            if (lastIndex < text.length) {
+                val postText = text.substring(lastIndex)
+                Text(text = cleanMathTags(postText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+            }
         }
     }
 }
@@ -56,7 +68,7 @@ fun cleanMathTags(input: String): String {
         .replace("&amp;", "&")
 }
 
-// 2. Original fallback formatter (kept to prevent history log build crashes)
+// 2. Original fallback formatter
 @Composable
 fun mathExpressionFormatter(
     text: String,
