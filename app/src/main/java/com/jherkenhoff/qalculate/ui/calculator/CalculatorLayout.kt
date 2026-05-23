@@ -18,7 +18,7 @@ fun CalculatorLayout(
     Column(modifier = modifier.fillMaxSize().background(Color.Black)) {
         // Input Section - Liquid Glass Surface
         Box(modifier = Modifier.weight(1f).padding(8.dp)
-            .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(16.dp))) {
+            .background(Color.White.copy(alpha = 0.15f), RoundedCornerShape(16.dp))) {
             inputSection()
         }
         // Keypad Section - True Black Base
