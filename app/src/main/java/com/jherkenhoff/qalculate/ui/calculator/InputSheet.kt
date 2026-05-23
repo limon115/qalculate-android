@@ -52,6 +52,7 @@ import com.jherkenhoff.qalculate.R
 import com.jherkenhoff.qalculate.domain.AutocompleteResult
 import com.jherkenhoff.qalculate.model.UserPreferences
 import com.jherkenhoff.qalculate.ui.common.mathExpressionFormatter
+import com.jherkenhoff.qalculate.ui.common.MathDisplay
 import kotlinx.coroutines.awaitCancellation
 
 
@@ -110,16 +111,7 @@ fun InputSheet(
                 onUserPreferencesChanged = onUserPreferencesChanged
             )
         }
-        AutoSizeText(
-            text = mathExpressionFormatter(resultString),
-            alignment = Alignment.CenterEnd,
-            style = MaterialTheme.typography.displayMedium,
-            minTextSize = 14.sp,
-            maxTextSize = 40.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .align(Alignment.End)
+        AutoSizeMathDisplay(text = resultString)
                 .padding(horizontal = 16.dp, vertical=8.dp)
                 .defaultMinSize(minHeight = 60.dp)
         )
