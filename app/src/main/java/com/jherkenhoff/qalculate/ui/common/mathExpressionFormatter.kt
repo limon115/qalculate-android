@@ -1,7 +1,12 @@
 package com.jherkenhoff.qalculate.ui.common
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -9,7 +14,49 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.em
 
-// Rebuild engineered by Khalid Hasan Limon
+// 1. The Limon Rebuild 2D Math Display Engine
+@Composable
+fun MathDisplay(text: String, modifier: Modifier = Modifier) {
+    // Regex to capture the exact Qalculate fraction structure
+    val fracRegex = Regex("<frac><num>(.*?)</num><den>(.*?)</den></frac>")
+    
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.wrapContentSize()
+    ) {
+        var lastIndex = 0
+        val matches = fracRegex.findAll(text)
+        
+        for (match in matches) {
+            val preText = text.substring(lastIndex, match.range.first)
+            if (preText.isNotEmpty()) {
+                Text(text = cleanMathTags(preText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+            }
+            
+            // Extract the numerator and denominator and feed them to the TrueFraction engine
+            val num = cleanMathTags(match.groupValues[1])
+            val den = cleanMathTags(match.groupValues[2])
+            TrueFraction(numerator = num, denominator = den)
+            
+            lastIndex = match.range.last + 1
+        }
+        
+        if (lastIndex < text.length) {
+            val postText = text.substring(lastIndex)
+            Text(text = cleanMathTags(postText), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+        }
+    }
+}
+
+fun cleanMathTags(input: String): String {
+    return input.replace(Regex("<.*?>"), "")
+        .replace("&nbsp;", "")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&amp;", "&")
+}
+
+// 2. Original fallback formatter (kept to prevent history log build crashes)
 @Composable
 fun mathExpressionFormatter(
     text: String,
@@ -31,12 +78,12 @@ fun mathExpressionFormatter(
                 "</sup>" -> pop()
                 "<sub>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.7.em))
                 "</sub>" -> pop()
-                "<frac>" -> append("(") // Start of fraction
+                "<frac>" -> append("(") 
                 "<num>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Superscript, fontSize = 0.8.em))
                 "</num>" -> pop()
                 "<den>" -> pushStyle(SpanStyle(baselineShift = BaselineShift.Subscript, fontSize = 0.8.em))
                 "</den>" -> pop()
-                "</frac>" -> append(")") // End of fraction
+                "</frac>" -> append(")")
                 "&nbsp;" -> append("")
                 "&lt;" -> append("<")
                 "&gt;" -> append(">")
